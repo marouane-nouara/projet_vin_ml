@@ -1,4 +1,4 @@
-# 🍷 Classification de la qualité du vin
+#  Classification de la qualité du vin
 
 Projet de **Machine Learning I** (EFREI Paris, 2026–2027).
 L'objectif est de prédire si un vin est **bon** (note d'experts ≥ 7) uniquement à partir de ses **mesures physico-chimiques** : acidité, sucre, alcool, pH, sulfites…
@@ -120,8 +120,8 @@ projet-vin-ml/
 **Prérequis :** Python 3.10 ou plus récent.
 
 ```bash
-git clone https://github.com/<votre-pseudo>/projet-vin-ml.git
-cd projet-vin-ml
+git clone https://github.com/marouane-nouara/projet-vin-ml.git
+cd projet_vin_ml
 python -m venv .venv
 # Windows : .venv\Scripts\activate    |    macOS / Linux : source .venv/bin/activate
 pip install -r requirements.txt
@@ -144,9 +144,9 @@ Pour le recompiler : `pdflatex rapport_projet_vin.tex` (deux fois), depuis le do
 
 ## Auteurs
 
-- *[Nom Prénom]*
-- *[Nom Prénom]*
-- *[Nom Prénom]*
+- *[Marouane NOUARA]*
+- *[Fatou KA]*
+- *[Rebecca KOUADIO]*
 
 Encadrants : Ahmed Ghazi Blaiech, Ahmad Tay, Hassan Shraim (EFREI Paris).
 
