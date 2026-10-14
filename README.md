@@ -1,4 +1,4 @@
-# 🍷 Classification de la qualité du vin
+#  Classification de la qualité du vin
 
 Projet de **Machine Learning I** (EFREI Paris, 2026–2027).
 L'objectif est de prédire si un vin est **bon** (note d'experts ≥ 7) uniquement à partir de ses **mesures physico-chimiques** : acidité, sucre, alcool, pH, sulfites…
