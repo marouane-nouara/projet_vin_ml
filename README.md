@@ -47,9 +47,9 @@ Le notebook [`projet_vin.ipynb`](projet_vin.ipynb) suit les étapes vues en cour
 | 5 | Préparation | Train / test 80 / 20 stratifié · standardisation (z-score) ajustée sur le train uniquement |
 | 6 | Sélection de variables | **RFE** (méthode *wrapper*) : alcool 1er, acidité volatile 2e · les 12 variables sont conservées |
 | 7 | Modélisation | Régression logistique, k-NN, arbre de décision (entropie), Naive Bayes gaussien, SVM (noyau RBF) |
-| 8 | Évaluation | Validation croisée 5 plis sur le train (prédictions *out-of-fold*) · matrices de confusion, courbes ROC · diagnostic **biais / variance** et courbes de complexité |
+| 8 | Évaluation | Validation croisée 5 plis sur le train (prédictions *out-of-fold*) · matrices de confusion, courbes ROC · diagnostic **biais / variance** (F1 train vs F1 validation) |
 | 9 | Optimisation | **Grid Search** (régression logistique, arbre), **Random Search** (SVM), les deux pour le k-NN · critère : F1 en validation croisée · **le jeu de test n'est utilisé qu'une seule fois**, pour l'évaluation finale |
-| 10 | Interprétation | Frontière de décision du SVM sur les deux variables principales |
+| 10 | Conclusion | Lecture de la matrice de confusion du SVM, tableau récapitulatif, limites et pistes d'amélioration |
 
 ---
 
@@ -65,9 +65,7 @@ Le notebook [`projet_vin.ipynb`](projet_vin.ipynb) suit les étapes vues en cour
 | Naive Bayes | 0,496 | 0,493 | biais (hypothèses non respectées) |
 | SVM (RBF) | 0,577 | 0,545 | **meilleur compromis** |
 
-<p align="center"><img src="rapport/fig/complexite.png" width="85%" alt="F1 train et validation selon la complexité de l'arbre et du k-NN"></p>
-
-L'arbre non contraint apprend le train par cœur : limiter sa profondeur à 3 fait passer son F1 de validation de 0,40 à 0,51.
+L'arbre non contraint apprend le train par cœur (F1 train = 1) : la Grid Search limite sa profondeur à 3, ce qui fait passer son F1 de validation de 0,40 à 0,51.
 
 ### Évaluation finale sur le jeu de test (1 064 vins, dont 202 bons)
 
@@ -82,24 +80,25 @@ L'arbre non contraint apprend le train par cœur : limiter sa profondeur à 3 fa
 Le modèle final est choisi **sur le F1 en validation croisée**, puis confirmé sur le test. Le SVM retrouve **165 des 202 bons vins** du test.
 
 <p align="center">
-  <img src="rapport/fig/roc_test.png" width="40%" alt="Courbes ROC sur le test">
-  <img src="rapport/fig/svm_frontiere.png" width="48%" alt="Frontière de décision du SVM">
+  <img src="rapport/fig/confusion_svm_test.png" width="42%" alt="Matrice de confusion du SVM sur le test">
+  <img src="rapport/fig/roc_test.png" width="46%" alt="Courbes ROC sur le test">
 </p>
 
-**Lecture :** les bons vins combinent un degré d'alcool élevé et une acidité volatile faible. La frontière est courbe, ce qu'un modèle linéaire ne peut pas représenter. Les deux classes se chevauchent fortement, ce qui limite le F1 atteignable.
+**Lecture :** le SVM retrouve environ 82 % des bons vins et n'en manque que 37, mais produit 244 fausses alertes (précision de 0,40). Il convient donc à un **pré-filtrage** des vins à faire goûter, pas à une décision automatique.
 
 ### Limites et perspectives
 
-- La note est subjective, et des vins notés 6 et 7 sont chimiquement très proches.
-- Un seul découpage train / test a été utilisé.
-- Pistes : méthodes d'ensemble (Random Forest, AdaBoost, Stacking), ajustement du seuil de décision à partir de la courbe ROC, modèles séparés pour les rouges et les blancs.
+- Beaucoup de fausses alertes : le modèle sert à présélectionner, la décision finale reste à la dégustation.
+- Les résultats dépendent du seuil « note ≥ 7 » et du déséquilibre qu'il crée ; les mesures de laboratoire ne capturent pas tout le goût.
+- La RFE repose sur un modèle linéaire.
+- Pistes : Random Forest, Gradient Boosting, rééquilibrage SMOTE, ajustement du seuil de décision, modèles séparés pour les rouges et les blancs ; côté ingénierie, tests unitaires, Docker, petite application web.
 
 ---
 
 ## Structure du dépôt
 
 ```
-projet-vin-ml/
+projet_vin_ml/
 ├── projet_vin.ipynb          # notebook complet (code, graphiques, commentaires)
 ├── data/
 │   ├── winequality-red.csv   # 1 599 vins rouges
@@ -120,8 +119,8 @@ projet-vin-ml/
 **Prérequis :** Python 3.10 ou plus récent.
 
 ```bash
-git clone https://github.com/<votre-pseudo>/projet-vin-ml.git
-cd projet-vin-ml
+git clone https://github.com/marouane-nouara/projet_vin_ml.git
+cd projet_vin_ml
 python -m venv .venv
 # Windows : .venv\Scripts\activate    |    macOS / Linux : source .venv/bin/activate
 pip install -r requirements.txt
@@ -144,9 +143,9 @@ Pour le recompiler : `pdflatex rapport_projet_vin.tex` (deux fois), depuis le do
 
 ## Auteurs
 
-- *[Nom Prénom]*
-- *[Nom Prénom]*
-- *[Nom Prénom]*
+- *[Marouane NOUARA]*
+- *[Fatou KA]*
+- *[Rebecca KOUADIO]*
 
 Encadrants : Ahmed Ghazi Blaiech, Ahmad Tay, Hassan Shraim (EFREI Paris).
 

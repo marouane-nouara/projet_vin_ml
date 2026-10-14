@@ -49,7 +49,7 @@
 % ============================ Page de titre ===========================
 \begin{titlepage}
   \centering
-  {\large EFREI Paris -- Cycle ingénieur\par}
+  {\large EFREI Paris -- Ingé 2\par}
   {\large Machine Learning I \quad -- \quad Année 2026--2027\par}
   \vspace{3.2cm}
   {\color{vin}\rule{\linewidth}{1pt}\par}
@@ -63,9 +63,9 @@
   {\Large Rapport technique\par}
   \vfill
   \begin{tabular}{rl}
-    \textbf{Auteurs :} & \textit{[Nom Prénom]} \\
-                       & \textit{[Nom Prénom]} \\
-                       & \textit{[Nom Prénom]} \\[6pt]
+    \textbf{Auteurs :} & \textit{[Fatou KA]} \\
+                       & \textit{[Rebecca KOUADIO]} \\
+                       & \textit{[Marouane NOUARA]} \\[6pt]
     \textbf{Encadrants :} & Ahmed Ghazi \textsc{Blaiech}, Ahmad \textsc{Tay}, Hassan \textsc{Shraim} \\
   \end{tabular}
   \vspace{1.5cm}
@@ -423,15 +423,6 @@ SVM (RBF)             & 0,577 & 0,545 & 0,017 & 0,032 & bon compromis \\
 
 La régression logistique et Naive Bayes présentent des scores d'apprentissage et de validation quasi identiques mais modestes : leur limite est structurelle (frontière linéaire, hypothèses trop fortes), ce qui relève du biais. L'arbre atteint $\Fun = 1$ en apprentissage mais seulement 0,405 en validation : il a mémorisé l'ensemble d'apprentissage. Le SVM combine le meilleur score de validation et un faible écart.
 
-\paragraph{Courbes de complexité.} Pour les deux modèles dont la complexité se règle par un unique paramètre, nous traçons le $\Fun$ d'apprentissage et de validation en fonction de cette complexité (figure~\ref{fig:complexite}). Pour l'arbre, le $\Fun$ d'apprentissage croît vers 1 avec la profondeur tandis que celui de validation décroît : l'optimum est atteint pour une profondeur de 3 ($\Fun = 0{,}511$). On retrouve la forme classique de l'erreur en fonction de la complexité, avec une zone de biais à gauche et une zone de variance à droite. Pour le $k$-NN, le $\Fun$ de validation \emph{diminue} quand $k$ augmente. Sans pondération, un grand nombre de voisins fait presque toujours l'emporter la classe majoritaire, et le modèle détecte de moins en moins de bons vins. Le $k$-NN est ainsi pris entre la variance (petit $k$) et l'effet du déséquilibre (grand $k$).
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=\linewidth]{complexite.png}
-\caption{$\Fun$ d'apprentissage et de validation selon la complexité : profondeur maximale de l'arbre (gauche) et nombre de voisins $k$ du $k$-NN, axe inversé (droite).}
-\label{fig:complexite}
-\end{figure}
-
 % ==================== 10. Optimisation des hyperparamètres ===================
 \section{Optimisation des hyperparamètres}\label{sec:optimisation}
 
@@ -482,14 +473,7 @@ SVM (RBF)             & $C=100$, $\gamma=0{,}01$, balanced & \textbf{0,545} & \t
 \end{tabular}
 \end{table}
 
-L'\textbf{arbre} est le modèle qui bénéficie le plus de l'optimisation ($+0{,}11$). La profondeur retenue (3) coïncide avec l'optimum de la courbe de complexité : limiter la profondeur supprime l'essentiel de la variance. La \textbf{régression logistique} ne progresse pratiquement pas malgré une régularisation forte ($C=0{,}01$), ce qui confirme que sa limite est un biais structurel. Pour le \textbf{SVM}, la configuration trouvée égale la configuration par défaut ($\gamma=\texttt{scale}=1/p\approx0{,}083$ sur données standardisées, $C=1$) : celle-ci se situait déjà dans une zone favorable. Pour le \textbf{$k$-NN}, les deux recherches aboutissent à la même configuration ($k=1$, distance de Manhattan), la recherche aléatoire avec presque deux fois moins d'évaluations. Ce résultat appelle toutefois une réserve : $k=1$ est le cas de variance maximale. Le critère $\Fun$ favorise les petites valeurs de $k$ parce qu'en l'absence de pondération, c'est la seule manière pour le $k$-NN de prédire suffisamment de bons vins. Enfin, la pondération \code{balanced} est retenue pour la régression logistique comme pour l'arbre, ce qui confirme la nécessité de traiter le déséquilibre.
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.62\linewidth]{f1_avant_apres.png}
-\caption{$\Fun$ moyen en validation croisée avant et après optimisation.}
-\label{fig:avantapres}
-\end{figure}
+L'\textbf{arbre} est le modèle qui bénéficie le plus de l'optimisation ($+0{,}11$). Limiter la profondeur à 3 niveaux supprime l'essentiel de la variance : le $\Fun$ d'apprentissage passe de 1 à 0,525, tandis que le $\Fun$ de validation progresse de 0,405 à 0,511. La \textbf{régression logistique} ne progresse pratiquement pas malgré une régularisation forte ($C=0{,}01$), ce qui confirme que sa limite est un biais structurel. Pour le \textbf{SVM}, la configuration trouvée égale la configuration par défaut ($\gamma=\texttt{scale}=1/p\approx0{,}083$ sur données standardisées, $C=1$) : celle-ci se situait déjà dans une zone favorable. Pour le \textbf{$k$-NN}, les deux recherches aboutissent à la même configuration ($k=1$, distance de Manhattan), la recherche aléatoire avec presque deux fois moins d'évaluations. Ce résultat appelle toutefois une réserve : $k=1$ est le cas de variance maximale. Le critère $\Fun$ favorise les petites valeurs de $k$ parce qu'en l'absence de pondération, c'est la seule manière pour le $k$-NN de prédire suffisamment de bons vins. Enfin, la pondération \code{balanced} est retenue pour la régression logistique comme pour l'arbre, ce qui confirme la nécessité de traiter le déséquilibre.
 
 % ======================== 11. Évaluation finale ========================
 \section{Évaluation finale sur le jeu de test}\label{sec:final}
@@ -535,25 +519,32 @@ Le \textbf{SVM à noyau RBF} est retenu comme modèle final : il est le meilleur
 \label{fig:final}
 \end{figure}
 
-\paragraph{Interprétation géométrique.} Pour visualiser le comportement du SVM, un modèle de mêmes hyperparamètres est entraîné sur les deux variables les mieux classées par la RFE, l'alcool et l'acidité volatile (figure~\ref{fig:frontiere}). Il s'agit d'une illustration et non du modèle final, qui utilise les douze variables. Quatre observations ressortent :
-\begin{itemize}
-  \item les bons vins se concentrent dans la région \og alcool élevé, acidité volatile faible à modérée \fg{} ;
-  \item la frontière est courbe et oblique : plus l'acidité volatile est élevée, plus la teneur en alcool requise pour être classé \og bon \fg{} augmente, ce qu'un modèle linéaire ne peut pas représenter ;
-  \item les deux classes se chevauchent largement, ce qui borne les performances atteignables ;
-  \item la région \og bon \fg{} est étendue du fait de la pondération des classes, ce qui explique le rappel élevé et la précision modeste.
-\end{itemize}
+\paragraph{Lecture de la matrice de confusion.} Le SVM détecte environ 82\,\% des bons vins (165 sur 202) et n'en manque que 37 (faux négatifs). En contrepartie, il émet 244 fausses alertes : sa précision de 0,40 signifie que, parmi les vins qu'il déclare bons, seuls quatre sur dix le sont réellement. Ce profil convient à un \textbf{pré-filtrage} des vins à faire goûter (on écarte d'emblée la majorité des vins moyens en perdant peu de bons vins), mais pas à une décision automatique.
 
-\begin{figure}[H]
+\paragraph{Tableau récapitulatif.} Le tableau~\ref{tab:recap} rassemble, pour chaque modèle, le score obtenu à chaque étape du protocole.
+
+\begin{table}[H]
 \centering
-\includegraphics[width=0.6\linewidth]{svm_frontiere.png}
-\caption{Frontière de décision d'un SVM RBF ($C=100$, $\gamma=0{,}01$) entraîné sur l'alcool et l'acidité volatile (variables standardisées). Zone rouge : prédiction \og bon \fg{}. Points : 500 vins de l'apprentissage.}
-\label{fig:frontiere}
-\end{figure}
+\caption{Récapitulatif : validation croisée (modèles par défaut puis optimisés) et jeu de test.}
+\label{tab:recap}
+\small
+\begin{tabular}{lcccccc}
+\toprule
+\textbf{Modèle} & \makecell{$\boldsymbol{\Fun}$ \textbf{CV}\\\textbf{défaut}} & \makecell{\textbf{AUC CV}\\\textbf{défaut}} & \makecell{$\boldsymbol{\Fun}$ \textbf{CV}\\\textbf{optimisé}} & $\boldsymbol{\Fun}$ \textbf{test} & \textbf{AUC test} & $\boldsymbol{\Fun}$ \textbf{train} \\
+\midrule
+SVM (RBF)             & \textbf{0,545} & \textbf{0,844} & \textbf{0,544} & \textbf{0,540} & \textbf{0,850} & 0,573 \\
+Régression logistique & 0,538 & 0,832 & 0,540 & 0,533 & 0,817 & 0,541 \\
+Arbre de décision     & 0,406 & 0,633 & 0,511 & 0,488 & 0,791 & 0,525 \\
+Naive Bayes           & 0,493 & 0,776 & 0,493 & 0,482 & 0,759 & 0,496 \\
+$k$-NN                & 0,464 & 0,786 & 0,482 & 0,536 & 0,714 & 1,000 \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 % ============================ 12. Discussion ===========================
 \section{Discussion}\label{sec:discussion}
 
-\paragraph{Niveau de performance.} Un $\Fun$ de 0,54 peut paraître modeste. Plusieurs facteurs l'expliquent. La note est une médiane d'appréciations subjectives, et la frontière à 7 sépare des vins (notés 6 et 7) souvent très proches chimiquement. Les variables disponibles ne décrivent pas tous les déterminants de la qualité : cépage, millésime, arômes ou prix n'y figurent pas. Enfin, la figure~\ref{fig:frontiere} montre un recouvrement important des classes. L'AUC de 0,85 indique néanmoins que le modèle ordonne correctement les vins dans la grande majorité des cas.
+\paragraph{Niveau de performance.} Un $\Fun$ de 0,54 peut paraître modeste. Plusieurs facteurs l'expliquent. La note est une médiane d'appréciations subjectives, et la frontière à 7 sépare des vins (notés 6 et 7) souvent très proches chimiquement. Les variables disponibles ne décrivent pas tous les déterminants de la qualité : cépage, millésime, arômes ou prix n'y figurent pas. Enfin, les classes se recouvrent largement dans l'espace des variables. L'AUC de 0,85 indique néanmoins que le modèle ordonne correctement les vins dans la grande majorité des cas.
 
 \paragraph{Compromis précision/rappel.} Le modèle final privilégie le rappel. Ce compromis découle de la pondération des classes et du seuil de décision par défaut. Selon l'usage (recommandation à un client contre présélection pour une dégustation), un autre point de fonctionnement sur la courbe ROC pourrait être préférable. Ajuster le seuil par validation croisée constitue d'ailleurs une alternative à la pondération des classes, applicable aux cinq modèles, y compris le $k$-NN et Naive Bayes qui n'admettent pas \code{class\_weight}.
 
@@ -562,21 +553,23 @@ Le \textbf{SVM à noyau RBF} est retenu comme modèle final : il est le meilleur
   \item La standardisation est ajustée sur l'ensemble d'apprentissage complet avant la validation croisée. Chaque pli de validation contribue donc marginalement au calcul des moyennes et écarts-types. L'effet est négligeable ici, mais l'usage d'un \code{Pipeline} scikit-learn l'éliminerait.
   \item La RFE repose sur un modèle linéaire. Une sélection fondée sur un modèle non linéaire pourrait produire un classement différent.
   \item Les performances proviennent d'un unique découpage apprentissage/test. Une validation croisée répétée ou imbriquée fournirait des intervalles de confiance plus fiables, en particulier pour départager le SVM et la régression logistique, dont les scores diffèrent de moins d'un écart-type.
-  \item La binarisation au seuil 7 fait perdre l'information ordinale de la note.
+  \item La binarisation au seuil 7 fait perdre l'information ordinale de la note, et les résultats dépendent de ce seuil comme du déséquilibre qu'il induit.
+  \item Les mesures de laboratoire ne capturent pas tout ce qui fait le goût d'un vin.
 \end{itemize}
 
 \paragraph{Perspectives.} Plusieurs pistes peuvent être explorées :
 \begin{itemize}
-  \item les méthodes d'ensemble : forêts aléatoires (\emph{bagging}), AdaBoost (\emph{boosting}) ou empilement (\emph{stacking}) des modèles étudiés, généralement plus performantes que les modèles individuels sur ce type de données tabulaires ;
-  \item l'ajustement du seuil de décision à partir de la courbe ROC ;
+  \item les méthodes d'ensemble : forêts aléatoires (\emph{bagging}) ou \emph{Gradient Boosting} (\emph{boosting}), généralement plus performantes que les modèles individuels sur ce type de données tabulaires ;
+  \item le rééquilibrage des données par sur-échantillonnage synthétique de la classe minoritaire (SMOTE) ;
+  \item l'ajustement du seuil de décision à partir de la courbe ROC, pour réduire les fausses alertes ;
   \item des modèles distincts pour les vins rouges et blancs ;
-  \item une formulation en régression ou en classification ordinale exploitant la note complète.
+  \item côté ingénierie : tests unitaires, conteneurisation (Docker) et petite application web exposant le modèle.
 \end{itemize}
 
 % ============================ 13. Conclusion ===========================
 \section{Conclusion}
 
-Ce projet a mis en œuvre une chaîne complète d'apprentissage supervisé pour prédire la qualité d'un vin à partir de mesures physico-chimiques. Le déséquilibre des classes (19\,\% de bons vins) a structuré les choix méthodologiques : découpage stratifié, pondération des classes, score $\Fun$ et AUC comme critères. L'analyse exploratoire et la sélection par RFE convergent sur le rôle prépondérant du degré d'alcool et de l'acidité volatile. La comparaison des cinq modèles, menée exclusivement par validation croisée, a permis d'identifier les sources d'erreur de chacun : biais pour la régression logistique et Naive Bayes, variance pour l'arbre non contraint et le $k$-NN. L'optimisation des hyperparamètres a surtout bénéficié à l'arbre, dont la profondeur limitée corrige le sur-apprentissage. Évalué une seule fois sur le jeu de test, le SVM à noyau RBF obtient les meilleures performances ($\Fun = 0{,}54$, AUC $= 0{,}85$, rappel $= 0{,}82$), avec un écart minime entre validation et test. Ses performances restent néanmoins limitées par la subjectivité de la note et le recouvrement des classes. Les méthodes d'ensemble et l'ajustement du seuil de décision constituent les prolongements les plus prometteurs.
+Ce projet a mis en œuvre une chaîne complète d'apprentissage supervisé pour prédire la qualité d'un vin à partir de mesures physico-chimiques. Le déséquilibre des classes (19\,\% de bons vins) a structuré les choix méthodologiques : découpage stratifié, pondération des classes, score $\Fun$ et AUC comme critères. L'analyse exploratoire et la sélection par RFE convergent sur le rôle prépondérant du degré d'alcool et de l'acidité volatile. La comparaison des cinq modèles, menée exclusivement par validation croisée, a permis d'identifier les sources d'erreur de chacun : biais pour la régression logistique et Naive Bayes, variance pour l'arbre non contraint et le $k$-NN. L'optimisation des hyperparamètres a surtout bénéficié à l'arbre, dont la profondeur limitée corrige le sur-apprentissage. Évalué une seule fois sur le jeu de test, le SVM à noyau RBF obtient les meilleures performances ($\Fun = 0{,}54$, AUC $= 0{,}85$, rappel $= 0{,}82$), avec un écart minime entre validation et test. Ses performances restent néanmoins limitées par la subjectivité de la note et le recouvrement des classes. Avec un rappel de 82\,\% mais une précision de 40\,\%, il est adapté au pré-filtrage des vins à déguster, la décision finale restant à la dégustation humaine. Les méthodes d'ensemble et l'ajustement du seuil de décision constituent les prolongements les plus prometteurs.
 
 % ============================ Références ===============================
 \begin{thebibliography}{9}
